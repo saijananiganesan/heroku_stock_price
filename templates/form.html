@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.2.0/bokeh.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.2.0/bokeh-widgets.css" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.2.0/bokeh-tables.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<div class="card-body border-success" style="border-color: solid black;">
+    <!-- start overall card body for front page -->
+    <div class="card-header" style="background-color:#dee2e6; height=11rem">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <body>
+                    <h1>Look up your favorite stocks!</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body border-success" style="border-color: solid black;">
+    <!-- start overall card body for front page -->
+    <div class="card-header" style="background-color: #FFF; height=18rem">
+        <div class="row">
+            <div class="col-lg-12">
+               <h3 class="font-weight-light" align='center'>Ticker Form</h3>
+               <form action=""  method="POST">
+                  <div class="form-group">
+                     <label for="exampleInputName1">Ticker</label>
+                     <input type="text" class="form-control" id="exampleInputName1" placeholder="Ticker" name="Ticker" value="{{request.form.Ticker}}">
+                  </div>
+                  <input type="submit" class="btn btn-primary"  value="Submit">
+               </form>
+                </body>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.2.0/bokeh.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.2.0/bokeh-widgets.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.2.0/bokeh-tables.js"></script>
+
+</html>

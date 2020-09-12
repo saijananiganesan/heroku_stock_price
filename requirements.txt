@@ -1,0 +1,9 @@
+flask==1.1.1
+gunicorn==19.9.0
+requests==2.20.0
+pandas==1.0.1
+bokeh==1.4.0
+dill==0.3.2
+jinja2==2.11.1
+pip==20.0.2
+simplejson==3.17.2
