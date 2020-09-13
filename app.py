@@ -12,23 +12,25 @@ from bokeh.layouts import row,column
 
 
 def get_stock_data(stock='ADAP'):
-	url='https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol='+stock+'&interval=5min&apikey=QY9UJA149OLAIWCW'
+	url='https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+stock+'&interval=60min&outputsize=full&apikey=QY9UJA149OLAIWCW'
 	response=requests.get(url);
 	if response.status_code!=200:
 		print ("Error....unable to fetch data from AlphaAdvantage, please try another entry")
 	data_dic=response.json();
 	try:
-		time_series=data_dic['Weekly Time Series']
+		time_series=data_dic['Time Series (Daily)']
 		train = pd.DataFrame.from_dict(time_series, orient='index')
 		train.reset_index(level=0, inplace=True)
 		train.rename(columns={'index':'Date','1. open':'Open',
 					 '2. high':'High', '3. low':'Low','4. close':'Close',
 					  '5. volume':'Volume'},inplace=True)
 		train['Date']= pd.to_datetime(train['Date'])
+		train_dataset=train.iloc[:30,:]
+		print (train_dataset.head())
 	except:
-		train='None'
+		train_dataset='None'
 
-	return train
+	return train_dataset
 
 
 app = Flask(__name__)
@@ -43,8 +45,8 @@ def form():
 
 		if stock_data.__class__.__name__ == 'DataFrame':
 			tabs_S=[]
-			plot = figure(plot_width=1000, plot_height=500, toolbar_location="below",x_axis_type="datetime",
-					title='Price of Requested Stock [Opened Prices]')
+			plot = figure(plot_width=1000, plot_height=500,toolbar_location="below",x_axis_type="datetime",
+					title='Price of Requested Stock [Opening Prices]')
 			plot.line(stock_data['Date'],stock_data['Open'], color='gray',line_width=1)
 			plot.circle(stock_data['Date'],stock_data['Open'],color='blue',fill_alpha=0.3,size=5)
 			plot.title.text_font_size='12pt'
@@ -54,12 +56,12 @@ def form():
 			plot.yaxis.major_label_text_font_size="14pt"
 			plot.xaxis.axis_label = "Date"
 			plot.xaxis.axis_label_text_font_size='14pt'
-			plot.yaxis.axis_label = 'Price($)'
+			plot.yaxis.axis_label = 'Opening Price($)'
 			plot.yaxis.axis_label_text_font_size='14pt'
 			stock_data['Open']=stock_data['Open'].astype(float)
 			plot.y_range=Range1d(stock_data['Open'].min(), stock_data['Open'].max())
 
-			tabs_S.append(Panel(child=row(plot), title='Price: Open'))
+			tabs_S.append(Panel(child=row(plot), title='Price: Opening'))
 
 			plotH = figure(plot_width=1000, plot_height=500, toolbar_location="below",x_axis_type="datetime",
 							title='Price of Requested Stock [High Prices]')
@@ -73,12 +75,12 @@ def form():
 			plotH.yaxis.major_label_text_font_size="14pt"
 			plotH.xaxis.axis_label = "Date"
 			plotH.xaxis.axis_label_text_font_size='14pt'
-			plotH.yaxis.axis_label = 'Price($)'
+			plotH.yaxis.axis_label = 'High Price($)'
 			plotH.yaxis.axis_label_text_font_size='14pt'
 			stock_data['High']=stock_data['High'].astype(float)
 			plotH.y_range=Range1d(stock_data['High'].min(), stock_data['High'].max())
 
-			tabs_S.append(Panel(child=row(plotH), title='Price: high'))
+			tabs_S.append(Panel(child=row(plotH), title='Price: High'))
 
 			plotL = figure(plot_width=1000, plot_height=500, toolbar_location="below",x_axis_type="datetime",
 							title='Price of Requested Stock [Low Prices]')
@@ -92,16 +94,16 @@ def form():
 			plotL.yaxis.major_label_text_font_size="14pt"
 			plotL.xaxis.axis_label = "Date"
 			plotL.xaxis.axis_label_text_font_size='14pt'
-			plotL.yaxis.axis_label = 'Price($)'
+			plotL.yaxis.axis_label = 'Low Price($)'
 			plotL.yaxis.axis_label_text_font_size='14pt'
 			stock_data['Low']=stock_data['Low'].astype(float)
 			plotL.y_range=Range1d(stock_data['Low'].min(), stock_data['Low'].max())
 
-			tabs_S.append(Panel(child=row(plotL), title='Price: low'))
+			tabs_S.append(Panel(child=row(plotL), title='Price: Low'))
 
 
 			plotC = figure(plot_width=1000, plot_height=500, toolbar_location="below",x_axis_type="datetime",
-							title='Price of Requested Stock [Closed Prices]')
+							title='Price of Requested Stock [Closing Prices]')
 
 			plotC.line(stock_data['Date'],stock_data['Close'], color='gray',line_width=1)
 			plotC.circle(stock_data['Date'],stock_data['Close'],color='blue',fill_alpha=0.3,size=5)
@@ -112,12 +114,12 @@ def form():
 			plotC.yaxis.major_label_text_font_size="14pt"
 			plotC.xaxis.axis_label = "Date"
 			plotC.xaxis.axis_label_text_font_size='14pt'
-			plotC.yaxis.axis_label = 'Price($)'
+			plotC.yaxis.axis_label = 'Closing Price($)'
 			plotC.yaxis.axis_label_text_font_size='14pt'
 			stock_data['Close']=stock_data['Close'].astype(float)
 			plotC.y_range=Range1d(stock_data['Close'].min(), stock_data['Close'].max())
 
-			tabs_S.append(Panel(child=row(plotC), title='Price: closed'))
+			tabs_S.append(Panel(child=row(plotC), title='Price: Closing'))
 
 
 			tabs = Tabs(tabs=tabs_S)
